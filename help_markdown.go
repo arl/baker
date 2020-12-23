@@ -53,10 +53,8 @@ func terminalWidth() uint {
 	}
 
 	ws := &struct{ Row, Col, Xpixel, Ypixel uint16 }{}
-	retCode, _, errno := syscall.Syscall(syscall.SYS_IOCTL,
-		uintptr(syscall.Stdout),
-		uintptr(syscall.TIOCGWINSZ),
-		uintptr(unsafe.Pointer(ws)))
+
+	retCode, _, errno := bakerSyscall(16, 3, uintptr(syscall.Stdout), 0x5413, uintptr(unsafe.Pointer(ws)))
 
 	if int(retCode) == -1 {
 		panic(errno)
